@@ -1,23 +1,22 @@
-package ftpput;
+package org.sinbelisk.graphicftp.services;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTP;
 
-public class FTPPut {
+public class FTPGet {
 
   public static void main(String[] args) {
 
     if (args.length < 1) {
       System.out.println("ERROR: indicar como parámetros:");
-      System.out.println("servidor fichero_local_a_transferir usuario(opcional) contraseña(opcional)");
+      System.out.println("servidor fichero_en_servidor usuario(opcional) contraseña(opcional)");
       System.exit(1);
     }
     String servidorFTP = args[0];
-    String nomFichLocal = args[1];
+    String ficheroEnServidor = args[1];
 
     String usuario = "anonymous", password = "";
     if (args.length >= 3) {
@@ -25,12 +24,6 @@ public class FTPPut {
     }
     if (args.length >= 3) {
       password = args[3];
-    }
-
-    File fLocal = new File(nomFichLocal);
-    if (!fLocal.exists() || !fLocal.isFile()) {
-      System.out.printf("ERROR: Fichero %s no existe.\n", nomFichLocal);
-      return;
     }
 
     FTPClient clienteFTP = new FTPClient();
@@ -59,11 +52,18 @@ public class FTPPut {
       System.out.printf("INFO: Conexión establecida, mensaje de bienvenida del servidor:\n====\n%s====\n", clienteFTP.getReplyString());
       System.out.printf("INFO: Directorio actual en servidor: %s.\n", clienteFTP.printWorkingDirectory());
 
-      String nomFichRemoto = fLocal.getName();
-      clienteFTP.storeFile(nomFichRemoto, new FileInputStream(nomFichLocal));
+      String tamFichEnServidor = clienteFTP.getSize(ficheroEnServidor);
+      if (tamFichEnServidor == null) {
+        System.out.printf("ERROR: Fichero %s no existe en servidor.\n", ficheroEnServidor);
+        return;
+      }
 
-      System.out.printf("INFO: Se ha intentado copiar fichero local al servidor, con nombre %s.\n", nomFichLocal, nomFichRemoto
-      );
+      String nomFichLocal = ficheroEnServidor.substring(ficheroEnServidor.lastIndexOf('/') + 1);
+      try (FileOutputStream fos = new FileOutputStream(nomFichLocal)) {
+        clienteFTP.retrieveFile(ficheroEnServidor, fos);
+      }
+
+      System.out.printf("INFO: Se ha intentado copiar fichero %s a fichero local %s.\n", ficheroEnServidor, nomFichLocal);
       System.out.printf("INFO: Respuesta del servidor:\n====\n%s====\n", clienteFTP.getReplyString());
 
       codResp = clienteFTP.getReplyCode();
