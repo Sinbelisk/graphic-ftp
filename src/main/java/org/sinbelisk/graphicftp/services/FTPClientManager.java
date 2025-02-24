@@ -19,6 +19,8 @@ public class FTPClientManager {
     private final String server;
     private final int port;
 
+    private String user;
+
     /**
      * Constructor de la clase FTPClientManager.
      *
@@ -47,6 +49,7 @@ public class FTPClientManager {
 
             if (loginSuccess) {
                 logger.info("Usuario '{}' ha iniciado sesión correctamente.", username);
+                user = username;
                 ftpClient.enterLocalPassiveMode();
             } else {
                 logger.warn("Error al iniciar sesión para el usuario '{}'.", username);
@@ -76,6 +79,7 @@ public class FTPClientManager {
             if (ftpClient.isConnected()) {
                 ftpClient.logout();
                 ftpClient.disconnect();
+                user = null;
                 logger.info("Cliente FTP desconectado correctamente.");
             }
         } catch (IOException e) {
@@ -91,14 +95,15 @@ public class FTPClientManager {
      * @return true si la subida es exitosa, false en caso contrario.
      */
     public boolean uploadFile(String localFilePath, String remoteFilePath) {
+        String remotePath = getUserFolder(remoteFilePath);
         try (FileInputStream fis = new FileInputStream(localFilePath)) {
-            logger.info("Subiendo archivo: {} -> {}", localFilePath, remoteFilePath);
-            boolean success = ftpClient.storeFile(remoteFilePath, fis);
+            logger.info("Subiendo archivo: {} -> {}", localFilePath, remotePath);
+            boolean success = ftpClient.storeFile(remotePath, fis);
 
             if (success) {
-                logger.info("Archivo subido correctamente a {}", remoteFilePath);
+                logger.info("Archivo subido correctamente a {}", remotePath);
             } else {
-                logger.warn("No se pudo subir el archivo a {}", remoteFilePath);
+                logger.warn("No se pudo subir el archivo a {}", remotePath);
             }
 
             return success;
@@ -116,14 +121,15 @@ public class FTPClientManager {
      * @return true si la descarga es exitosa, false en caso contrario.
      */
     public boolean downloadFile(String remoteFilePath, String localFilePath) {
+        String remotePath = getUserFolder(remoteFilePath);
         try (FileOutputStream fos = new FileOutputStream(localFilePath)) {
-            logger.info("Descargando archivo: {} -> {}", remoteFilePath, localFilePath);
-            boolean success = ftpClient.retrieveFile(remoteFilePath, fos);
+            logger.info("Descargando archivo: {} -> {}", remotePath, localFilePath);
+            boolean success = ftpClient.retrieveFile(remotePath, fos);
 
             if (success) {
                 logger.info("Archivo descargado correctamente en {}", localFilePath);
             } else {
-                logger.warn("No se pudo descargar el archivo desde {}", remoteFilePath);
+                logger.warn("No se pudo descargar el archivo desde {}", remotePath);
             }
 
             return success;
@@ -131,5 +137,9 @@ public class FTPClientManager {
             logger.error("Error al descargar el archivo: {}", e.getMessage(), e);
             return false;
         }
+    }
+
+    private String getUserFolder(String remoteFilePath) {
+        return user + "/" + remoteFilePath;
     }
 }
