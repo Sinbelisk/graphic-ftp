@@ -2,6 +2,7 @@ module org.sinbelisk.graphicftp {
     requires javafx.controls;
     requires javafx.fxml;
     requires org.apache.commons.net;
+    requires org.apache.logging.log4j;
 
 
     opens org.sinbelisk.graphicftp to javafx.fxml;
