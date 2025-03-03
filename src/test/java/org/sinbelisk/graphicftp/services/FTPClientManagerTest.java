@@ -16,7 +16,6 @@ public class FTPClientManagerTest {
     private static final String USERNAME = "usuario1";
     private static final String PASSWORD = "usu1";
 
-    private static final String TEST_RESOURCE_PATH = "src/test/resources/";
     private static final String LOCAL_FILE = "test_upload.txt";
     private static final String REMOTE_FILE = "server_test.txt";
 
@@ -44,7 +43,7 @@ public class FTPClientManagerTest {
         ftpClientManager.connectAndLogin(USERNAME, PASSWORD);
         File file = new File(LOCAL_FILE);
         assertTrue(file.exists(), "El archivo local debe existir antes de subirlo");
-        assertTrue(ftpClientManager.uploadFile(LOCAL_FILE, USERNAME + REMOTE_FILE), "La subida del archivo debe ser exitosa");
+        assertTrue(ftpClientManager.uploadFile(LOCAL_FILE, "PatataRancia/"+REMOTE_FILE), "La subida del archivo debe ser exitosa");
         ftpClientManager.disconnect();
     }
 
@@ -54,8 +53,8 @@ public class FTPClientManagerTest {
     @Test
     void testDownloadFile() {
         ftpClientManager.connectAndLogin(USERNAME, PASSWORD);
-        assertTrue(ftpClientManager.downloadFile(USERNAME + REMOTE_FILE, TEST_RESOURCE_PATH + "downloaded_test.txt"), "La descarga del archivo debe ser exitosa");
-        File downloadedFile = new File(TEST_RESOURCE_PATH + "downloaded_test.txt");
+        assertTrue(ftpClientManager.downloadFile(REMOTE_FILE, "downloaded_test.txt"), "La descarga del archivo debe ser exitosa");
+        File downloadedFile = new File("downloaded_test.txt");
         assertTrue(downloadedFile.exists(), "El archivo descargado debe existir");
         ftpClientManager.disconnect();
         downloadedFile.delete(); // Limpieza

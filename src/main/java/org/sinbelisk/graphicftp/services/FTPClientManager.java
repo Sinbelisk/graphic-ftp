@@ -19,7 +19,7 @@ public class FTPClientManager {
     private final String server;
     private final int port;
 
-    private String user;
+    private String username;
 
     /**
      * Constructor de la clase FTPClientManager.
@@ -49,7 +49,7 @@ public class FTPClientManager {
 
             if (loginSuccess) {
                 logger.info("Usuario '{}' ha iniciado sesión correctamente.", username);
-                user = username;
+                this.username = username;
                 ftpClient.enterLocalPassiveMode();
             } else {
                 logger.warn("Error al iniciar sesión para el usuario '{}'.", username);
@@ -79,7 +79,7 @@ public class FTPClientManager {
             if (ftpClient.isConnected()) {
                 ftpClient.logout();
                 ftpClient.disconnect();
-                user = null;
+                username = null;
                 logger.info("Cliente FTP desconectado correctamente.");
             }
         } catch (IOException e) {
@@ -98,6 +98,7 @@ public class FTPClientManager {
         String remotePath = getUserFolder(remoteFilePath);
         try (FileInputStream fis = new FileInputStream(localFilePath)) {
             logger.info("Subiendo archivo: {} -> {}", localFilePath, remotePath);
+
             boolean success = ftpClient.storeFile(remotePath, fis);
 
             if (success) {
@@ -122,6 +123,7 @@ public class FTPClientManager {
      */
     public boolean downloadFile(String remoteFilePath, String localFilePath) {
         String remotePath = getUserFolder(remoteFilePath);
+
         try (FileOutputStream fos = new FileOutputStream(localFilePath)) {
             logger.info("Descargando archivo: {} -> {}", remotePath, localFilePath);
             boolean success = ftpClient.retrieveFile(remotePath, fos);
@@ -140,6 +142,10 @@ public class FTPClientManager {
     }
 
     private String getUserFolder(String remoteFilePath) {
-        return user + "/" + remoteFilePath;
+        return username + "/" + remoteFilePath;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }
