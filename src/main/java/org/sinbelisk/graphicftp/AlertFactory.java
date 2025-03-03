@@ -2,6 +2,7 @@ package org.sinbelisk.graphicftp;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextInputDialog;
 
 import java.util.Optional;
 
@@ -31,6 +32,16 @@ public class AlertFactory {
 
         Optional<ButtonType> result = alert.showAndWait();
         return result.isPresent() && result.get() == ButtonType.OK;
+    }
+
+    public static String showTextInputDialog(String message) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Ingresa los datos");
+        dialog.setHeaderText("Ingrese el nombre de la nueva carpeta:");
+        dialog.setContentText("Nombre:");
+
+        Optional<String> result = dialog.showAndWait();
+        return result.orElse(null);
     }
 
     private static void showAlert(Alert.AlertType type, String title, String message) {

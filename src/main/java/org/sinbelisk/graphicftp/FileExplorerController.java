@@ -130,60 +130,45 @@ public class FileExplorerController {
     }
 
     private void createFolder(TreeItem<String> selectedItem) {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Crear Carpeta");
-        dialog.setHeaderText("Ingrese el nombre de la nueva carpeta:");
-        dialog.setContentText("Nombre:");
+        String folderName = AlertFactory.showTextInputDialog("Nombre de la carpeta");
 
-        dialog.showAndWait().ifPresent(folderName -> {
-            try {
-                String path = getPathFromTreeItem(selectedItem);
-                logger.info("Creating folder at path: " + path + "/" + folderName); // Log added here
-                if (ftpClientManager.getFtpClient().makeDirectory(path + "/" + folderName)) {
-                    TreeItem<String> newFolder = new TreeItem<>("📁" + folderName);
-                    selectedItem.getChildren().add(newFolder);
-                } else {
-                    AlertFactory.showErrorAlert("Error al crear la carpeta.");
-                }
-            } catch (IOException e) {
-                AlertFactory.showErrorAlert("Error al crear la carpeta: " + e.getMessage());
+        try {
+            String path = getPathFromTreeItem(selectedItem);
+            logger.info("Creating folder at path: {}/{}", path, folderName);
+
+            if (ftpClientManager.getFtpClient().makeDirectory(path + "/" + folderName)) {
+                TreeItem<String> newFolder = new TreeItem<>("📁" + folderName);
+                selectedItem.getChildren().add(newFolder);
+            } else {
+                AlertFactory.showErrorAlert("Error al crear la carpeta.");
             }
-        });
+        } catch (IOException e) {
+            AlertFactory.showErrorAlert("Error al crear la carpeta: " + e.getMessage());
+        }
     }
 
     private void renameFileOrFolder(TreeItem<String> selectedItem) {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Renombrar");
-        dialog.setHeaderText("Ingrese el nuevo nombre:");
-        dialog.setContentText("Nombre:");
+        String newName = AlertFactory.showTextInputDialog("Nombre de la carpeta o fichero");
+        try {
+            String path = getPathFromTreeItem(selectedItem);
+            String parentPath = getPathFromTreeItem(selectedItem.getParent());
+            logger.info("Renaming file/folder from: {} to: {}/{}", path, parentPath, newName);
 
-        dialog.showAndWait().ifPresent(newName -> {
-            try {
-                String path = getPathFromTreeItem(selectedItem);
-                String parentPath = getPathFromTreeItem(selectedItem.getParent());
-                logger.info("Renaming file/folder from: " + path + " to: " + parentPath + "/" + newName); // Log added here
-
-                if (ftpClientManager.getFtpClient().rename(path, parentPath + "/" + newName)) {
-                    selectedItem.setValue(selectedItem.getValue().charAt(0) + newName);
-                } else {
-                    AlertFactory.showErrorAlert("Error al renombrar.");
-                }
-            } catch (IOException e) {
-                AlertFactory.showErrorAlert("Error al renombrar: " + e.getMessage());
+            if (ftpClientManager.getFtpClient().rename(path, parentPath + "/" + newName)) {
+                selectedItem.setValue(selectedItem.getValue().charAt(0) + newName);
+            } else {
+                AlertFactory.showErrorAlert("Error al renombrar.");
             }
-        });
+        } catch (IOException e) {
+            AlertFactory.showErrorAlert("Error al renombrar: " + e.getMessage());
+        }
     }
 
     private void deleteFileOrFolder(TreeItem<String> selectedItem) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmar Eliminación");
-        alert.setHeaderText("¿Estás seguro de que deseas eliminar esto?");
-        alert.setContentText("Esta acción no se puede deshacer.");
-
-        alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent(response -> {
+        if (AlertFactory.showConfirmationAlert("¿Seguro que quieres eliminar la carpeta?")){
             try {
                 String path = getPathFromTreeItem(selectedItem);
-                logger.info("Deleting file/folder at path: " + path); // Log added here
+                logger.info("Deleting file/folder at path: {}", path); // Log added here
                 boolean success;
                 if (selectedItem.getValue().startsWith("📁")) {
                     success = ftpClientManager.getFtpClient().removeDirectory(path);
@@ -198,7 +183,7 @@ public class FileExplorerController {
             } catch (IOException e) {
                 AlertFactory.showErrorAlert("Error al eliminar: " + e.getMessage());
             }
-        });
+        }
     }
 
     private String getPathFromTreeItem(TreeItem<String> item) {
@@ -211,5 +196,4 @@ public class FileExplorerController {
         }
         return path.toString();
     }
-
 }
