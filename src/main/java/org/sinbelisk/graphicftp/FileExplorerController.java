@@ -33,31 +33,11 @@ public class FileExplorerController {
     private TreeView<String> fileTreeView;
 
     private FTPClientManager ftpClientManager;
+    private FTPFileExplorer ftpFileExplorer;
 
     public void initialize() {
         fileTreeView.setOnMouseClicked(this::handleTreeViewClick);
-    }
-
-    private void populateTreeView(TreeItem<String> parent, String path) throws IOException {
-        logger.info("Populating tree view for path: " + path); // Log added here
-        FTPFile[] filesAndDirs = ftpClientManager.getFtpClient().listFiles(path);
-
-        List<TreeItem<String>> fileItems = new ArrayList<>();
-
-        for (FTPFile file : filesAndDirs) {
-            String icon = file.isDirectory() ? "📁" : file.getName().endsWith(".exe") ? "💽" : "📝";
-            TreeItem<String> item = new TreeItem<>(icon + file.getName());
-
-            if (file.isDirectory()) {
-                String newPath = path.endsWith("/") ? path + file.getName() : path + "/" + file.getName();
-                logger.info("Directory found, recursing into: " + newPath); // Log for recursive directory path
-                populateTreeView(item, newPath);
-            }
-
-            fileItems.add(item);
-        }
-
-        parent.getChildren().addAll(fileItems);
+        ftpFileExplorer = new FTPFileExplorer(fileTreeView);
     }
 
     public void onConnectClicked(ActionEvent actionEvent) throws IOException {
@@ -74,9 +54,7 @@ public class FileExplorerController {
         boolean loginSuccess = ftpClientManager.connectAndLogin(username, password);
 
         if (loginSuccess) {
-            TreeItem<String> rootItem = new TreeItem<>("📁 Root");
-            fileTreeView.setRoot(rootItem);
-            populateTreeView(rootItem, "/");
+            ftpFileExplorer.sync(ftpClientManager.getFtpClient());
 
             uploadDirBtn.setVisible(true);
             uploadFileBtn.setVisible(true);
@@ -96,7 +74,7 @@ public class FileExplorerController {
 
     private void disconnect() {
         ftpClientManager.disconnect();
-        fileTreeView.setRoot(null);
+        ftpFileExplorer.desync();
 
         uploadDirBtn.setVisible(false);
         uploadFileBtn.setVisible(false);
@@ -109,91 +87,44 @@ public class FileExplorerController {
     }
 
     private void handleTreeViewClick(MouseEvent event) {
-        if (event.getButton() == MouseButton.SECONDARY) {
-            TreeItem<String> selectedItem = fileTreeView.getSelectionModel().getSelectedItem();
-            if (selectedItem != null) {
-                ContextMenu contextMenu = new ContextMenu();
-
-                MenuItem createFolderItem = new MenuItem("Crear Carpeta");
-                createFolderItem.setOnAction(e -> createFolder(selectedItem));
-
-                MenuItem renameItem = new MenuItem("Renombrar");
-                renameItem.setOnAction(e -> renameFileOrFolder(selectedItem));
-
-                MenuItem deleteItem = new MenuItem("Eliminar");
-                deleteItem.setOnAction(e -> deleteFileOrFolder(selectedItem));
-
-                contextMenu.getItems().addAll(createFolderItem, renameItem, deleteItem);
-                contextMenu.show(fileTreeView, event.getScreenX(), event.getScreenY());
-            }
+        if (!(event.getButton() == MouseButton.SECONDARY)) {
+            return;
         }
-    }
 
-    private void createFolder(TreeItem<String> selectedItem) {
-        String folderName = AlertFactory.showTextInputDialog("Nombre de la carpeta");
+        TreeItem<String> selectedItem = fileTreeView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            ContextMenu contextMenu = new ContextMenu();
 
-        try {
-            String path = getPathFromTreeItem(selectedItem);
-            logger.info("Creating folder at path: {}/{}", path, folderName);
-
-            if (ftpClientManager.getFtpClient().makeDirectory(path + "/" + folderName)) {
-                TreeItem<String> newFolder = new TreeItem<>("📁" + folderName);
-                selectedItem.getChildren().add(newFolder);
-            } else {
-                AlertFactory.showErrorAlert("Error al crear la carpeta.");
-            }
-        } catch (IOException e) {
-            AlertFactory.showErrorAlert("Error al crear la carpeta: " + e.getMessage());
-        }
-    }
-
-    private void renameFileOrFolder(TreeItem<String> selectedItem) {
-        String newName = AlertFactory.showTextInputDialog("Nombre de la carpeta o fichero");
-        try {
-            String path = getPathFromTreeItem(selectedItem);
-            String parentPath = getPathFromTreeItem(selectedItem.getParent());
-            logger.info("Renaming file/folder from: {} to: {}/{}", path, parentPath, newName);
-
-            if (ftpClientManager.getFtpClient().rename(path, parentPath + "/" + newName)) {
-                selectedItem.setValue(selectedItem.getValue().charAt(0) + newName);
-            } else {
-                AlertFactory.showErrorAlert("Error al renombrar.");
-            }
-        } catch (IOException e) {
-            AlertFactory.showErrorAlert("Error al renombrar: " + e.getMessage());
-        }
-    }
-
-    private void deleteFileOrFolder(TreeItem<String> selectedItem) {
-        if (AlertFactory.showConfirmationAlert("¿Seguro que quieres eliminar la carpeta?")){
-            try {
-                String path = getPathFromTreeItem(selectedItem);
-                logger.info("Deleting file/folder at path: {}", path); // Log added here
-                boolean success;
-                if (selectedItem.getValue().startsWith("📁")) {
-                    success = ftpClientManager.getFtpClient().removeDirectory(path);
-                } else {
-                    success = ftpClientManager.getFtpClient().deleteFile(path);
+            MenuItem createFolderItem = new MenuItem("Crear Carpeta");
+            createFolderItem.setOnAction(e -> {
+                try {
+                    ftpFileExplorer.createFolder(selectedItem);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
-                if (success) {
-                    selectedItem.getParent().getChildren().remove(selectedItem);
-                } else {
-                    AlertFactory.showErrorAlert("Error al eliminar.");
-                }
-            } catch (IOException e) {
-                AlertFactory.showErrorAlert("Error al eliminar: " + e.getMessage());
-            }
-        }
-    }
+            });
 
-    private String getPathFromTreeItem(TreeItem<String> item) {
-        StringBuilder path = new StringBuilder();
-        while (item != null && item.getParent() != null) {
-            // Extraemos solo el nombre real, sin el emoticono
-            String itemName = item.getValue().substring(2);  // Elimina el emoticono
-            path.insert(0, "/" + itemName);
-            item = item.getParent();
+            MenuItem renameItem = new MenuItem("Renombrar");
+            renameItem.setOnAction(e -> {
+                String newName = AlertFactory.showTextInputDialog("Introduce el nombre del archivo o fichero");
+                try {
+                    ftpFileExplorer.renameFileOrFolder(selectedItem, newName);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+
+            MenuItem deleteItem = new MenuItem("Eliminar");
+            deleteItem.setOnAction(e -> {
+                try {
+                    ftpFileExplorer.deleteFileOrFolder(selectedItem);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+
+            contextMenu.getItems().addAll(createFolderItem, renameItem, deleteItem);
+            contextMenu.show(fileTreeView, event.getScreenX(), event.getScreenY());
         }
-        return path.toString();
     }
 }
