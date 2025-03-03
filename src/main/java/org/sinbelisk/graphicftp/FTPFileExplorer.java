@@ -66,45 +66,50 @@ public class FTPFileExplorer {
 
     private void populateTreeView(TreeItem<String> parent, String path) throws IOException {
         FTPFile[] filesAndDirs = client.listFiles(path);
-
         List<TreeItem<String>> items = new ArrayList<>();
+
         for (FTPFile file : filesAndDirs) {
-            String icon = file.isDirectory() ? FOLDER_ICON : file.getName().endsWith(".exe") ? PROGRAM_ICON : FILE_ICON;
-            TreeItem<String> item = new TreeItem<>(icon + file.getName());
-
-            logger.info("Reading: {}", file.getName());
-
+            TreeItem<String> item = createTreeItem(file);
             if (file.isDirectory()) {
-                String newPath = path.endsWith("/") ? path + file.getName() : path + "/" + file.getName();
-                item.setExpanded(false);
-
-                item.addEventHandler(TreeItem.branchExpandedEvent(), e -> {
-                    if (!item.getChildren().get(0).getValue().equals("Loading...")) return;
-                    item.getChildren().clear();
-                    Task<Void> loadTask = new Task<>() {
-                        @Override
-                        protected Void call() throws Exception {
-                            populateTreeView(item, newPath);
-                            return null;
-                        }
-                    };
-                    new Thread(loadTask).start();
-                });
-
-                item.getChildren().add(new TreeItem<>("Loading..."));
+                setupDirectoryTreeItem(item, path, file);
             }
-
             items.add(item);
         }
 
         updateTreeView(parent, items);
     }
 
-    // Método para actualizar el TreeView desde el hilo de la interfaz de usuario
-    private void updateTreeView(TreeItem<String> parent, List<TreeItem<String>> fileItems) {
+    private TreeItem<String> createTreeItem(FTPFile file) {
+        String icon = file.isDirectory() ? FOLDER_ICON : file.getName().endsWith(".exe") ? PROGRAM_ICON : FILE_ICON;
+        TreeItem<String> item = new TreeItem<>(icon + file.getName());
+        logger.info("Reading: {}", file.getName());
+        return item;
+    }
+
+    private void setupDirectoryTreeItem(TreeItem<String> item, String path, FTPFile file) {
+        String newPath = path.endsWith("/") ? path + file.getName() : path + "/" + file.getName();
+        item.setExpanded(false);
+
+        item.addEventHandler(TreeItem.branchExpandedEvent(), e -> {
+            if (!item.getChildren().get(0).getValue().equals("Loading...")) return;
+            item.getChildren().clear();
+            Task<Void> loadTask = new Task<>() {
+                @Override
+                protected Void call() throws Exception {
+                    populateTreeView(item, newPath);
+                    return null;
+                }
+            };
+            new Thread(loadTask).start();
+        });
+
+        item.getChildren().add(new TreeItem<>("Loading..."));
+    }
+
+    private void updateTreeView(TreeItem<String> parent, List<TreeItem<String>> items) {
         Platform.runLater(() -> {
-            logger.info("Updating TreeView with {} items.", fileItems.size());
-            parent.getChildren().addAll(fileItems);
+            logger.info("Updating TreeView with {} items.", items.size());
+            parent.getChildren().addAll(items);
         });
     }
 
