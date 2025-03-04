@@ -25,9 +25,6 @@
 
         <Button text="Conectar" onAction="#onConnectClicked"/>
         <Button text="Desconectar" onAction="#onDisconnectClicked"/>
-
-        <Button text="Subir archivo" onAction="#onUploadClicked" visible="false" fx:id="uploadFileBtn"/>
-        <Button text="Subir carpeta" onAction="#onUploadDirectoryClicked" visible="false" fx:id="uploadDirBtn"/>
     </VBox>
 
     <!-- TreeView a la derecha -->

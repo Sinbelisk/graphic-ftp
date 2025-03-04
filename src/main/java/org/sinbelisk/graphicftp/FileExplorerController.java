@@ -79,12 +79,6 @@ public class FileExplorerController {
         uploadFileBtn.setVisible(false);
     }
 
-    public void onUploadClicked(ActionEvent actionEvent) {
-    }
-
-    public void onUploadDirectoryClicked(ActionEvent actionEvent) {
-    }
-
     private void handleTreeViewClick(MouseEvent event) {
         if (event.getButton() != MouseButton.SECONDARY) {
             return;
