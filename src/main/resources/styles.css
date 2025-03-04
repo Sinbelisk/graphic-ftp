@@ -1,0 +1,108 @@
+/* Establece el fondo de la ventana */
+AnchorPane {
+    -fx-background-color: #e0e1dd;
+}
+
+/* Estilo del VBox (formulario de conexión) */
+VBox {
+    -fx-padding: 15px;
+    -fx-background-color: #1b263b;
+    -fx-border-color: #0d1b2a;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-alignment: center; /* Centra los elementos dentro del VBox */
+}
+
+/* Estilo de las etiquetas */
+Label {
+    -fx-text-fill: #e0e1dd;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+/* Estilo de los campos de texto y contraseña */
+TextField, PasswordField {
+    -fx-pref-width: 200px;
+    -fx-padding: 5px;
+    -fx-border-color: #415a77;
+    -fx-border-width: 1px;
+    -fx-background-color: #e0e1dd; /* Color más claro */
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-text-fill: #1b263b;
+}
+
+TextField:focused, PasswordField:focused {
+    -fx-border-color: #778da9;
+    -fx-background-color: white;
+}
+
+/* Cambiar el color del placeholder para mayor legibilidad */
+TextField, PasswordField {
+    -fx-prompt-text-fill: rgba(27, 38, 59, 0.7); /* Más oscuro para mejor lectura */
+}
+
+/* Contenedor para centrar los botones */
+.button-container {
+    -fx-alignment: center; /* Asegura que los botones se alineen al centro */
+    -fx-spacing: 10px;
+}
+
+/* Estilo de los botones */
+Button {
+    -fx-background-color: #415a77;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 15px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #778da9;
+    -fx-pref-width: 120px; /* Ajusta el ancho para que se vean alineados */
+}
+
+Button:hover {
+    -fx-background-color: #778da9;
+}
+
+Button:pressed {
+    -fx-background-color: #0d1b2a;
+}
+
+/* Estilo del TreeView */
+TreeView {
+    -fx-background-color: #e0e1dd; /* Igual al fondo de los campos de texto */
+    -fx-border-color: #0d1b2a;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 5px;
+}
+
+/* Fondo interior del TreeView */
+.tree-view {
+    -fx-background-color: #e0e1dd; /* Misma tonalidad que los TextFields */
+    -fx-border-radius: 6px; /* Bordes redondeados en el interior */
+    -fx-background-radius: 6px;
+}
+
+/* Estilo de las celdas del TreeView */
+.tree-cell {
+    -fx-text-fill: #1b263b; /* Texto oscuro para contraste */
+    -fx-font-size: 14px;
+    -fx-background-color: transparent; /* Fondo transparente por defecto */
+    -fx-border-radius: 6px; /* Bordes redondeados */
+}
+
+/* Fondo de celdas seleccionadas */
+.tree-cell:selected {
+    -fx-background-color: #415a77; /* Azul medio */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-radius: 6px; /* Bordes redondeados */
+}
+
+/* Fondo al pasar el mouse */
+.tree-cell:hover {
+    -fx-background-color: #778da9; /* Color más claro para resaltar */
+}

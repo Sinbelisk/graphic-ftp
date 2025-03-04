@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.TreeView?>
-<?import javafx.scene.layout.AnchorPane?>
 
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Button?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="org.sinbelisk.graphicftp.FileExplorerController">
-    <!-- Formulario a la izquierda -->
-    <VBox layoutX="10.0" layoutY="10.0" spacing="10">
+<?import javafx.scene.layout.HBox?>
+<HBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.sinbelisk.graphicftp.FileExplorerController" stylesheets="styles.css">
+    <VBox spacing="10" prefWidth="250" HBox.hgrow="NEVER">
         <Label text="Dirección del servidor FTP:"/>
         <TextField fx:id="serverAddressField" promptText="Ej: ftp.example.com"/>
 
@@ -23,10 +22,11 @@
         <Label text="Contraseña:"/>
         <PasswordField fx:id="passwordField" promptText="********"/>
 
-        <Button text="Conectar" onAction="#onConnectClicked"/>
-        <Button text="Desconectar" onAction="#onDisconnectClicked"/>
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Conectar" onAction="#onConnectClicked"/>
+            <Button text="Desconectar" onAction="#onDisconnectClicked"/>
+        </HBox>
     </VBox>
 
-    <!-- TreeView a la derecha -->
-    <TreeView fx:id="fileTreeView" layoutX="250.0" layoutY="10.0" prefHeight="580.0" prefWidth="400.0"/>
-</AnchorPane>
+    <TreeView fx:id="fileTreeView" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"/>
+</HBox>

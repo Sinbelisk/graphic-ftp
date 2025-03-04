@@ -54,9 +54,6 @@ public class FileExplorerController {
 
         if (loginSuccess) {
             ftpFileExplorer.sync(ftpClientManager);
-
-            uploadDirBtn.setVisible(true);
-            uploadFileBtn.setVisible(true);
         } else {
             AlertFactory.showErrorAlert("Error al conectarse al servidor especificado.");
             if (isClientConnected()) disconnect();
@@ -74,9 +71,6 @@ public class FileExplorerController {
     private void disconnect() {
         ftpClientManager.disconnect();
         ftpFileExplorer.desync();
-
-        uploadDirBtn.setVisible(false);
-        uploadFileBtn.setVisible(false);
     }
 
     private void handleTreeViewClick(MouseEvent event) {
