@@ -22,11 +22,13 @@ public class FileTreeContextMenu {
         this.fileTreeView = fileTreeView;
         this.contextMenu = new ContextMenu();
 
+        MenuItem uploadItem = new MenuItem("Subir");
+        MenuItem downloadItem = new MenuItem("Descargar");
         MenuItem createFolderItem = new MenuItem("Crear Carpeta");
         MenuItem renameItem = new MenuItem("Renombrar");
         MenuItem deleteItem = new MenuItem("Eliminar");
 
-        contextMenu.getItems().addAll(createFolderItem, renameItem, deleteItem);
+        contextMenu.getItems().addAll(createFolderItem, renameItem, deleteItem, downloadItem, uploadItem);
     }
 
     /**
@@ -49,6 +51,8 @@ public class FileTreeContextMenu {
             ftpFileExplorer.renameFileOrFolder(selectedItem, newName);
         });
         setActionForMenuItem(contextMenu.getItems().get(2), () -> ftpFileExplorer.deleteFileOrFolder(selectedItem));
+        setActionForMenuItem(contextMenu.getItems().get(3), () -> {ftpFileExplorer.downloadFile(selectedItem);});
+        setActionForMenuItem(contextMenu.getItems().get(4), () -> {ftpFileExplorer.uploadFile(selectedItem);});
     }
 
     /**

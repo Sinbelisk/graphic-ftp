@@ -1,0 +1,21 @@
+2025-03-04 17:23:51 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Conectándose al servidor FTP: localhost en puerto 21
+2025-03-04 17:23:51 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Usuario 'usuario1' ha iniciado sesión correctamente.
+2025-03-04 17:23:51 [Thread-3] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: usuario1
+2025-03-04 17:23:51 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Updating TreeView with 1 items.
+2025-03-04 17:23:52 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - TreeView synchronization completed successfully.
+2025-03-04 17:23:54 [Thread-4] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: LOG.txt
+2025-03-04 17:23:54 [Thread-4] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: server_test.txt
+2025-03-04 17:23:54 [Thread-4] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: Wokot_v4.3.exe
+2025-03-04 17:23:54 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Updating TreeView with 3 items.
+2025-03-04 17:24:01 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Subiendo archivo: C:\Users\rafji\Pictures\cropped-1920-1080-1332803.png -> /usuario1/cropped-1920-1080-1332803.png
+2025-03-04 17:24:01 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Archivo subido correctamente a /usuario1/cropped-1920-1080-1332803.png
+2025-03-04 17:24:07 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Conectándose al servidor FTP: localhost en puerto 21
+2025-03-04 17:24:07 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Usuario 'usuario1' ha iniciado sesión correctamente.
+2025-03-04 17:24:07 [Thread-5] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: usuario1
+2025-03-04 17:24:07 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Updating TreeView with 1 items.
+2025-03-04 17:24:07 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - TreeView synchronization completed successfully.
+2025-03-04 17:24:08 [Thread-6] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: cropped-1920-1080-1332803.png
+2025-03-04 17:24:08 [Thread-6] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: LOG.txt
+2025-03-04 17:24:08 [Thread-6] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: server_test.txt
+2025-03-04 17:24:08 [Thread-6] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: Wokot_v4.3.exe
+2025-03-04 17:24:08 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Updating TreeView with 4 items.

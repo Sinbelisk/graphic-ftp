@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -94,8 +95,7 @@ public class FTPClientManager {
      * @param remoteFilePath Ruta en el servidor FTP donde se guardará el archivo.
      * @return true si la subida es exitosa, false en caso contrario.
      */
-    public boolean uploadFile(String localFilePath, String remoteFilePath) {
-        String remotePath = getUserFolder(remoteFilePath);
+    public boolean uploadFile(String localFilePath, String remotePath) {
         try (FileInputStream fis = new FileInputStream(localFilePath)) {
             logger.info("Subiendo archivo: {} -> {}", localFilePath, remotePath);
 
@@ -121,8 +121,7 @@ public class FTPClientManager {
      * @param localFilePath Ruta local donde se guardará el archivo descargado.
      * @return true si la descarga es exitosa, false en caso contrario.
      */
-    public boolean downloadFile(String remoteFilePath, String localFilePath) {
-        String remotePath = getUserFolder(remoteFilePath);
+    public boolean downloadFile(String remotePath, String localFilePath) {
 
         try (FileOutputStream fos = new FileOutputStream(localFilePath)) {
             logger.info("Descargando archivo: {} -> {}", remotePath, localFilePath);
@@ -136,16 +135,69 @@ public class FTPClientManager {
 
             return success;
         } catch (IOException e) {
-            logger.error("Error al descargar el archivo: {}", e.getMessage(), e);
+            logger.error("Error al descargar el archivo", e);
             return false;
         }
     }
 
-    private String getUserFolder(String remoteFilePath) {
-        return username + "/" + remoteFilePath;
+    public boolean createFolder(String remotePath) {
+        try {
+            logger.info("Creating folder at path: {}", remotePath);
+            boolean success = ftpClient.makeDirectory(remotePath);
+
+            if (success) {
+                logger.info("Folder created successfully at {}", remotePath);
+            } else {
+                logger.warn("Failed to create folder at {}", remotePath);
+            }
+
+            return success;
+        } catch (IOException e) {
+            logger.error("Error creating folder: {}", e.getMessage(), e);
+            return false;
+        }
     }
 
-    public String getUsername() {
-        return username;
+    public boolean renameFileOrFolder(String remoteOldPath, String remoteNewPath) {
+        try {
+            logger.info("Renaming file/folder from: {} to: {}", remoteOldPath, remoteNewPath);
+            boolean success = ftpClient.rename(remoteOldPath, remoteNewPath);
+
+            if (success) {
+                logger.info("File/folder renamed successfully from: {} to: {}", remoteOldPath, remoteNewPath);
+            } else {
+                logger.warn("Failed to rename file/folder from: {} to: {}", remoteOldPath, remoteNewPath);
+            }
+
+            return success;
+        } catch (IOException e) {
+            logger.error("Error renaming file/folder: {}", e.getMessage(), e);
+            return false;
+        }
+    }
+
+    public boolean deleteFileOrFolder(String remotePath) {
+        try {
+            logger.info("Deleting file/folder at path: {}", remotePath);
+            boolean success;
+
+            FTPFile file = ftpClient.mlistFile(remotePath);
+            if (file != null && file.isDirectory()) {
+                success = ftpClient.removeDirectory(remotePath);
+            } else {
+                success = ftpClient.deleteFile(remotePath);
+            }
+
+            if (success) {
+                logger.info("File/folder deleted successfully at path: {}", remotePath);
+            } else {
+                logger.warn("Failed to delete file/folder at path: {}", remotePath);
+            }
+
+            return success;
+        } catch (IOException e) {
+            logger.error("Error deleting file/folder: {}", e.getMessage(), e);
+            return false;
+        }
     }
 }

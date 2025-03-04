@@ -1,0 +1,17 @@
+2025-03-04 19:33:30 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Conectándose al servidor FTP: localhost en puerto 21
+2025-03-04 19:33:30 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Usuario 'usuario1' ha iniciado sesión correctamente.
+2025-03-04 19:33:30 [Thread-3] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: usuario1
+2025-03-04 19:33:30 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Updating TreeView with 1 items.
+2025-03-04 19:33:30 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - TreeView synchronization completed successfully.
+2025-03-04 19:33:31 [Thread-4] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: Ejercicio3.mp4
+2025-03-04 19:33:31 [Thread-4] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: frase objetivo.txt
+2025-03-04 19:33:31 [Thread-4] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: prueba editar.png
+2025-03-04 19:33:31 [Thread-4] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: Wokot 4.0.exe
+2025-03-04 19:33:31 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Updating TreeView with 4 items.
+2025-03-04 19:33:31 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - TreeView synchronization completed successfully.
+2025-03-04 19:33:36 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Uploading file: 2024-11-25 15-47-25.mkv
+2025-03-04 19:33:36 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Subiendo archivo: C:\Users\rafji\Videos\2024-11-25 15-47-25.mkv -> /usuario1/2024-11-25 15-47-25.mkv
+2025-03-04 19:33:36 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Archivo subido correctamente a /usuario1/2024-11-25 15-47-25.mkv
+2025-03-04 19:34:20 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Uploading file: 200688.jpg
+2025-03-04 19:34:20 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Subiendo archivo: C:\Users\rafji\Pictures\200688.jpg -> /usuario1/200688.jpg
+2025-03-04 19:34:20 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Archivo subido correctamente a /usuario1/200688.jpg

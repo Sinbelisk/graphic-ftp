@@ -1,0 +1,17 @@
+2025-03-04 17:50:32 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Conectándose al servidor FTP: localhost en puerto 21
+2025-03-04 17:50:32 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Usuario 'usuario1' ha iniciado sesión correctamente.
+2025-03-04 17:50:32 [Thread-3] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: usuario1
+2025-03-04 17:50:32 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Updating TreeView with 1 items.
+2025-03-04 17:50:32 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - TreeView synchronization completed successfully.
+2025-03-04 17:50:33 [Thread-4] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: LOG.txt
+2025-03-04 17:50:33 [Thread-4] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: reacttest.iml
+2025-03-04 17:50:33 [Thread-4] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: server_test.txt
+2025-03-04 17:50:33 [Thread-4] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Reading: Wokot_v4.3.exe
+2025-03-04 17:50:33 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Updating TreeView with 4 items.
+2025-03-04 17:50:33 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - TreeView synchronization completed successfully.
+2025-03-04 17:50:41 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Uploading file: config.properties
+2025-03-04 17:50:41 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Subiendo archivo: D:\Backups\UnplayedGamesList\.gradle\config.properties -> \usuario1\config.properties
+2025-03-04 17:50:41 [JavaFX Application Thread] WARN org.sinbelisk.graphicftp.services.FTPClientManager - No se pudo subir el archivo a \usuario1\config.properties
+2025-03-04 17:50:55 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.FTPFileExplorer - Uploading file: AplicacionDosListasRafaelJimenez.7z
+2025-03-04 17:50:55 [JavaFX Application Thread] INFO org.sinbelisk.graphicftp.services.FTPClientManager - Subiendo archivo: D:\Android\AplicacionDosListasRafaelJimenez.7z -> \\AplicacionDosListasRafaelJimenez.7z
+2025-03-04 17:50:55 [JavaFX Application Thread] WARN org.sinbelisk.graphicftp.services.FTPClientManager - No se pudo subir el archivo a \\AplicacionDosListasRafaelJimenez.7z

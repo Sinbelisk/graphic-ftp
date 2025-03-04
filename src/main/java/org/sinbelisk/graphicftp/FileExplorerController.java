@@ -53,7 +53,7 @@ public class FileExplorerController {
         boolean loginSuccess = ftpClientManager.connectAndLogin(username, password);
 
         if (loginSuccess) {
-            ftpFileExplorer.sync(ftpClientManager.getFtpClient());
+            ftpFileExplorer.sync(ftpClientManager);
 
             uploadDirBtn.setVisible(true);
             uploadFileBtn.setVisible(true);
