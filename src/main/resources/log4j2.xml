@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
-        <File name="FileLogger" fileName="logs/app.log">
+        <!-- Consola -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%highlight{%d{yyyy-MM-dd HH:mm:ss} [%t] %level %logger{36} - %msg%n}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=cyan, TRACE=blue}</Pattern>
+            </PatternLayout>
+        </Console>
+
+        <!-- Archivo con nombre dinámico -->
+        <RollingFile name="RollingFileLogger"
+                     fileName="logs/app-${date:yyyy-MM-dd-HH-mm-ss}.log"
+                     filePattern="logs/archive/app-%d{yyyy-MM-dd-HH-mm-ss}.log.gz">
             <PatternLayout>
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %level %logger{36} - %msg%n</Pattern>
             </PatternLayout>
-        </File>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+        </RollingFile>
     </Appenders>
 
     <Loggers>
         <Root level="info">
-            <AppenderRef ref="FileLogger"/>
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFileLogger"/>
         </Root>
     </Loggers>
 </Configuration>
-
-
 
 
