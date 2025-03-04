@@ -31,10 +31,12 @@ public class FileExplorerController {
 
     private FTPClientManager ftpClientManager;
     private FTPFileExplorer ftpFileExplorer;
+    private FileTreeContextMenu fileTreeContextMenu;
 
     public void initialize() {
         fileTreeView.setOnMouseClicked(this::handleTreeViewClick);
         ftpFileExplorer = new FTPFileExplorer(fileTreeView);
+        fileTreeContextMenu = new FileTreeContextMenu(fileTreeView, ftpFileExplorer);
     }
 
     public void onConnectClicked(ActionEvent actionEvent) throws IOException {
@@ -84,44 +86,13 @@ public class FileExplorerController {
     }
 
     private void handleTreeViewClick(MouseEvent event) {
-        if (!(event.getButton() == MouseButton.SECONDARY)) {
+        if (event.getButton() != MouseButton.SECONDARY) {
             return;
         }
 
         TreeItem<String> selectedItem = fileTreeView.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-            ContextMenu contextMenu = new ContextMenu();
-
-            MenuItem createFolderItem = new MenuItem("Crear Carpeta");
-            createFolderItem.setOnAction(e -> {
-                try {
-                    ftpFileExplorer.createFolder(selectedItem);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            });
-
-            MenuItem renameItem = new MenuItem("Renombrar");
-            renameItem.setOnAction(e -> {
-                String newName = AlertFactory.showTextInputDialog("Introduce el nombre del archivo o fichero");
-                try {
-                    ftpFileExplorer.renameFileOrFolder(selectedItem, newName);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            });
-
-            MenuItem deleteItem = new MenuItem("Eliminar");
-            deleteItem.setOnAction(e -> {
-                try {
-                    ftpFileExplorer.deleteFileOrFolder(selectedItem);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            });
-
-            contextMenu.getItems().addAll(createFolderItem, renameItem, deleteItem);
-            contextMenu.show(fileTreeView, event.getScreenX(), event.getScreenY());
+            fileTreeContextMenu.showContextMenu(event, selectedItem);
         }
     }
 }
