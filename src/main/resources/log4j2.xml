@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
+        <File name="FileLogger" fileName="logs/app.log">
             <PatternLayout>
-                <Pattern>%highlight{%d{yyyy-MM-dd HH:mm:ss} [%t] %level %logger{36} - %msg%n}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=cyan, TRACE=blue}</Pattern>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %level %logger{36} - %msg%n</Pattern>
             </PatternLayout>
-        </Console>
+        </File>
     </Appenders>
 
     <Loggers>
         <Root level="info">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileLogger"/>
         </Root>
     </Loggers>
 </Configuration>

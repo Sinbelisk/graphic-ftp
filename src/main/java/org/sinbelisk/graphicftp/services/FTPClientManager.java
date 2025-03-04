@@ -50,7 +50,7 @@ public class FTPClientManager {
             if (loginSuccess) {
                 logger.info("Usuario '{}' ha iniciado sesión correctamente.", username);
                 this.username = username;
-                ftpClient.enterLocalPassiveMode();
+                //ftpClient.enterLocalPassiveMode();
             } else {
                 logger.warn("Error al iniciar sesión para el usuario '{}'.", username);
             }
