@@ -7,8 +7,19 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.List;
 
+/**
+ * Utilidades para manejar cuadros de diálogo de selección de archivos y carpetas en la interfaz gráfica.
+ * Esta clase proporciona métodos para seleccionar archivos, carpetas, y elegir ubicaciones para guardar
+ * archivos o carpetas, utilizando el {@link FileChooser} y {@link DirectoryChooser} de JavaFX.
+ * <p>
+ * Es necesario configurar el {@link Stage} principal de la aplicación antes de usar cualquier método de esta clase.
+ * Los métodos de selección permiten elegir un solo archivo, múltiples archivos, archivos dentro de una carpeta,
+ * o carpetas completas. También se incluye una opción para elegir dónde guardar un archivo o una carpeta.
+ * </p>
+ */
 public class FileChooserUtils {
 
+    // El Stage principal de la aplicación, necesario para abrir los cuadros de diálogo
     private static Stage stage;
 
     /**
@@ -24,6 +35,7 @@ public class FileChooserUtils {
      * Abre un cuadro de diálogo para seleccionar un archivo.
      *
      * @return el archivo seleccionado o null si se cancela
+     * @throws IllegalStateException si el Stage no ha sido configurado
      */
     public static File selectFile() {
         if (stage == null) {
@@ -39,6 +51,7 @@ public class FileChooserUtils {
      * Abre un cuadro de diálogo para seleccionar múltiples archivos.
      *
      * @return la lista de archivos seleccionados o null si se cancela
+     * @throws IllegalStateException si el Stage no ha sido configurado
      */
     public static List<File> selectMultipleFiles() {
         if (stage == null) {
@@ -52,8 +65,10 @@ public class FileChooserUtils {
 
     /**
      * Abre un cuadro de diálogo para seleccionar una carpeta y un archivo dentro de ella.
+     * El usuario primero selecciona la carpeta y luego se le pide que seleccione un archivo dentro de esa carpeta.
      *
      * @return el archivo seleccionado dentro de la carpeta o null si se cancela
+     * @throws IllegalStateException si el Stage no ha sido configurado
      */
     public static File selectFileInFolder() {
         if (stage == null) {
@@ -81,6 +96,7 @@ public class FileChooserUtils {
      * Abre un cuadro de diálogo para seleccionar una carpeta.
      *
      * @return la carpeta seleccionada o null si se cancela
+     * @throws IllegalStateException si el Stage no ha sido configurado
      */
     public static File selectFolder() {
         if (stage == null) {
@@ -97,6 +113,7 @@ public class FileChooserUtils {
      *
      * @param defaultFileName nombre por defecto del archivo
      * @return el archivo donde se guardará o null si se cancela
+     * @throws IllegalStateException si el Stage no ha sido configurado
      */
     public static File saveFile(String defaultFileName) {
         if (stage == null) {
@@ -113,6 +130,7 @@ public class FileChooserUtils {
      * Abre un cuadro de diálogo para elegir dónde guardar una carpeta.
      *
      * @return la carpeta de destino seleccionada o null si se cancela
+     * @throws IllegalStateException si el Stage no ha sido configurado
      */
     public static File saveFolder() {
         if (stage == null) {

@@ -11,7 +11,8 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Clase que gestiona la conexión y autenticación con un servidor FTP.
- * Proporciona métodos para conectarse, iniciar sesión y desconectarse del servidor.
+ * Proporciona métodos para conectarse, iniciar sesión y desconectarse del servidor,
+ * además de permitir la subida, descarga, creación, renombrado y eliminación de archivos y carpetas en el servidor.
  */
 public class FTPClientManager {
     private static final Logger logger = LogManager.getLogger(FTPClientManager.class);
@@ -49,16 +50,16 @@ public class FTPClientManager {
             boolean loginSuccess = ftpClient.login(username, password);
 
             if (loginSuccess) {
-                logger.info("User '{}' logged in successfully", username);
+                logger.info("Usuario '{}' ha iniciado sesión correctamente", username);
                 this.username = username;
                 //ftpClient.enterLocalPassiveMode();
             } else {
-                logger.warn("Login error for user '{}'.", username);
+                logger.warn("Error de inicio de sesión para el usuario '{}'.", username);
             }
 
             return loginSuccess;
         } catch (IOException e) {
-            logger.error("Error when connecting to the FTP Server: {}", e.getMessage(), e);
+            logger.error("Error al conectar con el servidor FTP: {}", e.getMessage(), e);
             return false;
         }
     }
@@ -81,10 +82,10 @@ public class FTPClientManager {
                 ftpClient.logout();
                 ftpClient.disconnect();
                 username = null;
-                logger.info("FTP Client successfully disconnected.");
+                logger.info("Cliente FTP desconectado correctamente.");
             }
         } catch (IOException e) {
-            logger.error("Error when connecting to the server: {}", e.getMessage(), e);
+            logger.error("Error al desconectar del servidor: {}", e.getMessage(), e);
         }
     }
 
@@ -92,24 +93,24 @@ public class FTPClientManager {
      * Sube un archivo al servidor FTP.
      *
      * @param localFilePath Ruta del archivo local.
-     * @param remoteFilePath Ruta en el servidor FTP donde se guardará el archivo.
+     * @param remotePath Ruta en el servidor FTP donde se guardará el archivo.
      * @return true si la subida es exitosa, false en caso contrario.
      */
     public boolean uploadFile(String localFilePath, String remotePath) {
         try (FileInputStream fis = new FileInputStream(localFilePath)) {
-            logger.info("Uploading file: {} -> {}", localFilePath, remotePath);
+            logger.info("Subiendo archivo: {} -> {}", localFilePath, remotePath);
 
             boolean success = ftpClient.storeFile(remotePath, fis);
 
             if (success) {
-                logger.info("File '{}' uploaded successfully", remotePath);
+                logger.info("Archivo '{}' subido correctamente", remotePath);
             } else {
-                logger.warn("Error when uploading file '{}'", remotePath);
+                logger.warn("Error al subir el archivo '{}'", remotePath);
             }
 
             return success;
         } catch (IOException e) {
-            logger.error("File upload failed: {}", e.getMessage(), e);
+            logger.error("Error al subir el archivo: {}", e.getMessage(), e);
             return false;
         }
     }
@@ -117,68 +118,87 @@ public class FTPClientManager {
     /**
      * Descarga un archivo del servidor FTP.
      *
-     * @param remoteFilePath Ruta del archivo en el servidor FTP.
+     * @param remotePath Ruta del archivo en el servidor FTP.
      * @param localFilePath Ruta local donde se guardará el archivo descargado.
      * @return true si la descarga es exitosa, false en caso contrario.
      */
     public boolean downloadFile(String remotePath, String localFilePath) {
 
         try (FileOutputStream fos = new FileOutputStream(localFilePath)) {
-            logger.info("Downloading file: {} -> {}", remotePath, localFilePath);
+            logger.info("Descargando archivo: {} -> {}", remotePath, localFilePath);
             boolean success = ftpClient.retrieveFile(remotePath, fos);
 
             if (success) {
-                logger.info("File successfully downloaded: {}", localFilePath);
+                logger.info("Archivo descargado correctamente: {}", localFilePath);
             } else {
-                logger.warn("Error downloading file: {}", remotePath);
+                logger.warn("Error al descargar el archivo: {}", remotePath);
             }
 
             return success;
         } catch (IOException e) {
-            logger.error("File download error: ", e);
+            logger.error("Error al descargar el archivo: ", e);
             return false;
         }
     }
 
+    /**
+     * Crea una carpeta en el servidor FTP.
+     *
+     * @param remotePath Ruta en el servidor donde se creará la carpeta.
+     * @return true si la creación de la carpeta es exitosa, false en caso contrario.
+     */
     public boolean createFolder(String remotePath) {
         try {
-            logger.info("Creating folder at path: {}", remotePath);
+            logger.info("Creando carpeta en la ruta: {}", remotePath);
             boolean success = ftpClient.makeDirectory(remotePath);
 
             if (success) {
-                logger.info("Folder created successfully at {}", remotePath);
+                logger.info("Carpeta creada correctamente en {}", remotePath);
             } else {
-                logger.warn("Failed to create folder at {}", remotePath);
+                logger.warn("Error al crear la carpeta en {}", remotePath);
             }
 
             return success;
         } catch (IOException e) {
-            logger.error("Error creating folder: {}", e.getMessage(), e);
+            logger.error("Error al crear la carpeta: {}", e.getMessage(), e);
             return false;
         }
     }
 
+    /**
+     * Renombra un archivo o carpeta en el servidor FTP.
+     *
+     * @param remoteOldPath Ruta del archivo o carpeta que se desea renombrar.
+     * @param remoteNewPath Nueva ruta para el archivo o carpeta.
+     * @return true si el renombrado es exitoso, false en caso contrario.
+     */
     public boolean renameFileOrFolder(String remoteOldPath, String remoteNewPath) {
         try {
-            logger.info("Renaming file/folder from: {} to: {}", remoteOldPath, remoteNewPath);
+            logger.info("Renombrando archivo/carpeta de: {} a: {}", remoteOldPath, remoteNewPath);
             boolean success = ftpClient.rename(remoteOldPath, remoteNewPath);
 
             if (success) {
-                logger.info("File/folder renamed successfully from: {} to: {}", remoteOldPath, remoteNewPath);
+                logger.info("Archivo/carpeta renombrado correctamente de: {} a: {}", remoteOldPath, remoteNewPath);
             } else {
-                logger.warn("Failed to rename file/folder from: {} to: {}", remoteOldPath, remoteNewPath);
+                logger.warn("Error al renombrar archivo/carpeta de: {} a: {}", remoteOldPath, remoteNewPath);
             }
 
             return success;
         } catch (IOException e) {
-            logger.error("Error renaming file/folder: {}", e.getMessage(), e);
+            logger.error("Error al renombrar archivo/carpeta: {}", e.getMessage(), e);
             return false;
         }
     }
 
+    /**
+     * Elimina un archivo o carpeta del servidor FTP.
+     *
+     * @param remotePath Ruta del archivo o carpeta a eliminar.
+     * @return true si la eliminación es exitosa, false en caso contrario.
+     */
     public boolean deleteFileOrFolder(String remotePath) {
         try {
-            logger.info("Deleting file/folder at path: {}", remotePath);
+            logger.info("Eliminando archivo/carpeta en la ruta: {}", remotePath);
             boolean success;
 
             FTPFile file = ftpClient.mlistFile(remotePath);
@@ -189,14 +209,14 @@ public class FTPClientManager {
             }
 
             if (success) {
-                logger.info("File/folder deleted successfully at path: {}", remotePath);
+                logger.info("Archivo/carpeta eliminado correctamente en la ruta: {}", remotePath);
             } else {
-                logger.warn("Failed to delete file/folder at path: {}", remotePath);
+                logger.warn("Error al eliminar archivo/carpeta en la ruta: {}", remotePath);
             }
 
             return success;
         } catch (IOException e) {
-            logger.error("Error deleting file/folder: {}", e.getMessage(), e);
+            logger.error("Error al eliminar archivo/carpeta: {}", e.getMessage(), e);
             return false;
         }
     }
