@@ -1,4 +1,4 @@
-package org.sinbelisk.graphicftp;
+package org.sinbelisk.graphicftp.util;
 
 import javafx.stage.FileChooser;
 import javafx.stage.DirectoryChooser;

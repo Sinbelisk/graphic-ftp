@@ -4,16 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.commons.net.ftp.FTPFile;
-import org.sinbelisk.graphicftp.services.FTPClientManager;
-import javafx.beans.property.SimpleStringProperty;
-
-import java.io.IOException;
+import org.sinbelisk.graphicftp.util.FileChooserUtils;
 
 public class FTPExplorerApp extends Application {
 

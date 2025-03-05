@@ -1,4 +1,4 @@
-package org.sinbelisk.graphicftp;
+package org.sinbelisk.graphicftp.controller;
 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -7,6 +7,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.sinbelisk.graphicftp.util.AlertFactory;
 
 import java.io.IOException;
 
