@@ -9,8 +9,6 @@ import org.sinbelisk.graphicftp.util.AlertFactory;
 import java.io.IOException;
 
 public class FileTreeContextMenu {
-    private static final Logger logger = LogManager.getLogger(FileTreeContextMenu.class);
-
     private final FTPFileExplorer ftpFileExplorer;
     private final TreeView<String> fileTreeView;
     private final ContextMenu contextMenu;
@@ -93,6 +91,6 @@ public class FileTreeContextMenu {
     }
 
     private void handleException(IOException ex) {
-        ex.printStackTrace();
+        AlertFactory.showErrorAlert(ex.getMessage());
     }
 }

@@ -15,8 +15,6 @@ import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 public class FileExplorerController {
-    private static final Logger logger = LogManager.getLogger(FileExplorerController.class);
-
     @FXML
     public TextField portField;
     @FXML
