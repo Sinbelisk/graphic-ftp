@@ -1,14 +1,11 @@
 package org.sinbelisk.graphicftp.controller;
 
-
 import org.apache.commons.net.ftp.FTPClient;
 import org.junit.jupiter.api.*;
 import org.sinbelisk.graphicftp.services.FTPClientManager;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
