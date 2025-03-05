@@ -11,6 +11,8 @@ import org.sinbelisk.graphicftp.services.FTPClientManager;
 import org.sinbelisk.graphicftp.util.AlertFactory;
 
 import java.io.IOException;
+import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
 public class FileExplorerController {
     private static final Logger logger = LogManager.getLogger(FileExplorerController.class);
@@ -24,10 +26,6 @@ public class FileExplorerController {
     @FXML
     public PasswordField passwordField;
     @FXML
-    public Button uploadFileBtn;
-    @FXML
-    public Button uploadDirBtn;
-    @FXML
     private TreeView<String> fileTreeView;
 
     private FTPClientManager ftpClientManager;
@@ -38,11 +36,31 @@ public class FileExplorerController {
         fileTreeView.setOnMouseClicked(this::handleTreeViewClick);
         ftpFileExplorer = new FTPFileExplorer(fileTreeView);
         fileTreeContextMenu = new FileTreeContextMenu(fileTreeView, ftpFileExplorer);
+        setupFormatterForPortField();
     }
 
-    public void onConnectClicked(ActionEvent actionEvent) throws IOException {
+    private void setupFormatterForPortField(){
+        // Expresión regular que permite solo dígitos
+        Pattern pattern = Pattern.compile("\\d*");
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            if (pattern.matcher(change.getControlNewText()).matches()) {
+                return change;
+            }
+            return null;
+        };
+
+        TextFormatter<String> textFormatter = new TextFormatter<>(filter);
+        portField.setTextFormatter(textFormatter);
+    }
+
+    public void onConnectClicked(ActionEvent actionEvent){
         if (isClientConnected() && !AlertFactory.showConfirmationAlert("Ya hay una conexión activa, estás seguro?")) {
             disconnect();
+        }
+
+        if (!areFieldsValid()){
+            AlertFactory.showErrorAlert("Los campos no pueden estar vacios.");
+            return;
         }
 
         String serverAddress = serverAddressField.getText();
@@ -55,6 +73,7 @@ public class FileExplorerController {
 
         if (loginSuccess) {
             ftpFileExplorer.sync(ftpClientManager);
+            AlertFactory.showInfoAlert("Se ha establecido la conexión con el servidor!");
         } else {
             AlertFactory.showErrorAlert("Error al conectarse al servidor especificado.");
             if (isClientConnected()) disconnect();
@@ -62,11 +81,22 @@ public class FileExplorerController {
     }
 
     public void onDisconnectClicked(ActionEvent actionEvent) {
-        disconnect();
+        if (ftpClientManager == null){
+            AlertFactory.showErrorAlert("No hay ninguna conexión abierta.");
+            return;
+        }
+
+        if(isClientConnected() && AlertFactory.showConfirmationAlert("Seguro que quieres terminar la sesión?")){
+           disconnect();
+        }
     }
 
     private boolean isClientConnected() {
         return ftpClientManager != null && ftpClientManager.getFtpClient().isConnected();
+    }
+
+    private boolean areFieldsValid() {
+        return !portField.getText().isEmpty() && !serverAddressField.getText().isEmpty() && !usernameField.getText().isEmpty() && !passwordField.getText().isEmpty();
     }
 
     private void disconnect() {

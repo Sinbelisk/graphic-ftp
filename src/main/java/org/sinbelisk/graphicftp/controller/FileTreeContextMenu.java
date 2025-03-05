@@ -1,9 +1,6 @@
 package org.sinbelisk.graphicftp.controller;
 
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +20,7 @@ public class FileTreeContextMenu {
         this.fileTreeView = fileTreeView;
         this.contextMenu = new ContextMenu();
 
+        // Objetos del menu desplegable.
         MenuItem uploadItem = new MenuItem("Subir");
         MenuItem downloadItem = new MenuItem("Descargar");
         MenuItem createFolderItem = new MenuItem("Crear Carpeta");
@@ -46,14 +44,31 @@ public class FileTreeContextMenu {
     }
 
     private void updateMenuItems(TreeItem<String> selectedItem) {
-        setActionForMenuItem(contextMenu.getItems().get(0), () -> ftpFileExplorer.createFolder(selectedItem));
+        setActionForMenuItem(contextMenu.getItems().get(0), () -> {
+            if (!ftpFileExplorer.createFolder(selectedItem))
+                AlertFactory.showErrorAlert("No se ha podido crear la carpeta.");
+        });
+
         setActionForMenuItem(contextMenu.getItems().get(1), () -> {
             String newName = AlertFactory.showTextInputDialog("Introduce el nombre del archivo o fichero");
-            ftpFileExplorer.renameFileOrFolder(selectedItem, newName);
+            if(!ftpFileExplorer.renameFileOrFolder(selectedItem, newName))
+                AlertFactory.showErrorAlert("No se ha podido renombrar la carpeta o fichero");
         });
-        setActionForMenuItem(contextMenu.getItems().get(2), () -> ftpFileExplorer.deleteFileOrFolder(selectedItem));
-        setActionForMenuItem(contextMenu.getItems().get(3), () -> {ftpFileExplorer.downloadFile(selectedItem);});
-        setActionForMenuItem(contextMenu.getItems().get(4), () -> {ftpFileExplorer.uploadFile(selectedItem);});
+
+        setActionForMenuItem(contextMenu.getItems().get(2), () ->{
+                    if(!ftpFileExplorer.deleteFileOrFolder(selectedItem))
+                        AlertFactory.showErrorAlert("No se ha podido eliminar la carpeta o fichero");
+                });
+
+        setActionForMenuItem(contextMenu.getItems().get(3), () -> {
+            if(!ftpFileExplorer.downloadFile(selectedItem)) AlertFactory.showErrorAlert("No se ha podido descargar el elemento especificado");
+            else AlertFactory.showInfoAlert("Elemento descargado satisfactoriamente.");
+        });
+
+        setActionForMenuItem(contextMenu.getItems().get(4), () -> {
+            if(!ftpFileExplorer.uploadFile(selectedItem)) AlertFactory.showErrorAlert("Error al subir el fichero seleccionado");
+            else AlertFactory.showInfoAlert("Elemento subido satisfactoriamente al servidor.");
+        });
     }
 
     /**
