@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
  * y desconexión a un servidor FTP.
  */
 public class FileExplorerController {
+    private static final Logger logger = LogManager.getLogger(FileExplorerController.class);
 
     // Campos vinculados a la interfaz gráfica (FXML)
     @FXML
@@ -88,6 +89,7 @@ public class FileExplorerController {
         // Valida que todos los campos de entrada estén completos
         if (!areFieldsValid()){
             AlertFactory.showErrorAlert("Los campos no pueden estar vacios.");
+            logger.warn("Some or all fields are invalid");
             return;
         }
 
@@ -107,6 +109,7 @@ public class FileExplorerController {
             AlertFactory.showInfoAlert("Se ha establecido la conexión con el servidor!");
         } else {
             AlertFactory.showErrorAlert("Error al conectarse al servidor especificado.");
+            logger.error("Could not connect to server");
             // Si la conexión falla, desconecta si estaba previamente conectado
             if (isClientConnected()) disconnect();
         }
@@ -120,6 +123,7 @@ public class FileExplorerController {
         // Verifica si no hay ninguna conexión activa
         if (ftpClientManager == null){
             AlertFactory.showErrorAlert("No hay ninguna conexión abierta.");
+            logger.warn("User wanted to disconnect, but there's not active connection.");
             return;
         }
 
@@ -153,6 +157,7 @@ public class FileExplorerController {
     private void disconnect() {
         ftpClientManager.disconnect();
         ftpFileExplorer.desync();
+        logger.info("User disconnected and file explored desynchronized");
     }
 
     /**
