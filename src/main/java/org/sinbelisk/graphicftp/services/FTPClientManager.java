@@ -59,7 +59,7 @@ public class FTPClientManager {
 
             return loginSuccess;
         } catch (IOException e) {
-            logger.error("Error al conectar con el servidor FTP: {}", e.getMessage(), e);
+            logger.error("Error al conectar con el servidor FTP: {}", e.getMessage());
             return false;
         }
     }
