@@ -44,6 +44,7 @@ public class FileExplorerController {
      * además de establecer el formateador para el campo de puerto.
      */
     public void initialize() {
+        logger.info("Initializing FileExplorerController");
         // Configura la acción al hacer clic en el árbol de archivos
         fileTreeView.setOnMouseClicked(this::handleTreeViewClick);
 
@@ -53,6 +54,7 @@ public class FileExplorerController {
 
         // Configura el filtro para el campo del puerto
         setupFormatterForPortField();
+        logger.info("Initialized FileExplorerController");
     }
 
     /**
