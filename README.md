@@ -51,7 +51,7 @@ Haciendo clic derecho sobre un archivo o carpeta, se despliega un menú con las 
 - **Descargar**: Guarda el archivo en una ubicación de tu equipo.
 - **Subir**: Permite seleccionar un archivo y subirlo al servidor.
 
-![Menú Contextual](img_1.png)
+![Menú Contextual](readmeResources/img_3.png)
 
 ### Consideraciones de Uso
 - Solo se pueden crear carpetas y subir archivos dentro de directorios, si se intenta desde un fichero se creará automáticamente en su carpeta padre.
