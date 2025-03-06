@@ -141,15 +141,32 @@ Para ejecutar los tests:
 - Usa herramientas como **Maven** o **Gradle**.
 - Modifica las variables de configuración de los tests según sea necesario.
 
-### 📝 Funcionamiento relevante
-Este apartado explica el funcionamiento de los algoritmos más relevantes implementados en la aplicación. Para más información revisa las clases resaltadas, todas las clases de la aplicación han sido documentadas utilizando `javadoc`.
-#### Sincronización servidor-explorador
-La clase `FTPFileExplorer.java` utiliza el servicio `FTPCLientManager.java` para gestionar la conexión a la base de datos. Mediante este servicio, recoge todos los ficheros y carpetas disponibles para el usuario que ha iniciado sesión y lo sincroniza con el `TreeView` que compone el explorador de archivos.  
+### 📝 Funcionamiento Relevante
 
-Al sincronizar el explorador, el programa lo hace desde un hilo a parte utilizando [Tasks](https://docs.oracle.com/javafx/2/api/javafx/concurrent/Task.html). Son operaciones que implementa **JavaFX** que se ejecutan en un hilo a parte.
+Este apartado explica el funcionamiento de los algoritmos más relevantes implementados en la aplicación.  
+Para más información, revisa las clases resaltadas. Todas las clases han sido documentadas utilizando `javadoc`.
 
-A medida que la **Task activa** recoge datos del servidor, va actualizando el `TreeView`con la información conseguida.
-#### Lazy loading
-El algoritmo de sincronización de `FTPFileExplorer.java` implementa **Lazy Loading** durante la sincronización.
+---
 
-Para evitar sobrecargar el servidor de peticiones y el dispositivo del usuario, estas sólamente se realizan para sincronizar la carpeta raíz del usuario durante la conexión y cada vez que despliega una carpeta en el explorador de archivos.
+### 🔄 Sincronización Servidor-Explorador
+
+La clase `FTPFileExplorer.java` utiliza el servicio `FTPClientManager.java` para gestionar la conexión al servidor FTP.  
+A través de este servicio, se obtiene la lista de archivos y carpetas disponibles para el usuario autenticado y se sincroniza con el `TreeView` del explorador de archivos.
+
+📌 **Proceso de sincronización:**
+1. La sincronización se realiza en un hilo separado utilizando [Tasks](https://docs.oracle.com/javafx/2/api/javafx/concurrent/Task.html) de **JavaFX**.
+2. A medida que la **Task activa** recibe datos del servidor, se actualiza dinámicamente el `TreeView` con la información obtenida.
+3. Esto garantiza que la interfaz gráfica no se bloquee mientras se realiza la sincronización.
+
+---
+
+### ⏳ Lazy Loading
+
+El algoritmo de sincronización en `FTPFileExplorer.java` implementa **Lazy Loading** para optimizar el rendimiento.
+
+📌 **Principios del Lazy Loading en la aplicación:**
+- **Carga diferida:** Solo se sincroniza la carpeta raíz del usuario al establecer la conexión.
+- **Petición bajo demanda:** Se realiza una consulta al servidor **únicamente cuando el usuario expande una carpeta** en el explorador.
+- **Eficiencia:** Se evita sobrecargar tanto el servidor con peticiones innecesarias como el dispositivo del usuario con datos no requeridos.
+
+Este enfoque mejora la escalabilidad y la experiencia del usuario, asegurando una carga rápida y fluida de los archivos.
