@@ -32,7 +32,10 @@ public class ElementUtils {
         // Obtiene el icono (carpeta o archivo) del nombre original
         String icon = originalName.substring(0, 2);
         // Obtiene la extensión del archivo
-        String extension = originalName.substring(originalName.lastIndexOf('.'));
+        String extension;
+        try {
+            extension = originalName.substring(originalName.lastIndexOf('.'));
+        } catch (IndexOutOfBoundsException e) { extension = ""; }
         // Devuelve el nuevo nombre con el icono y la extensión
         return icon + newName + extension;
     }
