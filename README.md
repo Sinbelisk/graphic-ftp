@@ -15,11 +15,11 @@
 1. Descarga la última versión desde [GitHub Releases](https://github.com/iesgrancapitan2425-din/tarea8-2-practica-final-trimestre-Sinbelisk/releases).
 2. Descomprime el archivo en tu ubicación preferida.
 3. Ejecuta el archivo:
-   - **Windows**: Doble clic en `graphic-ftp.exe`.
-   - **Alternativa**: Ejecuta el `.jar` manualmente:
-     ```sh
-     java -jar graphic-ftp-V1.0.jar
-     ```
+    - **Windows**: Doble clic en `graphic-ftp.exe`.
+    - **Alternativa**: Ejecuta el `.jar` manualmente:
+      ```sh
+      java -jar graphic-ftp-V1.0.jar
+      ```
 
 ---
 
@@ -54,7 +54,7 @@ Haciendo clic derecho sobre un archivo o carpeta, se despliega un menú con las 
 ![Menú Contextual](img_1.png)
 
 ### Consideraciones de Uso
-- Solo se pueden crear carpetas y subir archivos dentro de directorios, si se intenta desde un fichero se creará automaticamente en su carpeta padre.
+- Solo se pueden crear carpetas y subir archivos dentro de directorios, si se intenta desde un fichero se creará automáticamente en su carpeta padre.
 - Todas las acciones se realizan desde el menú contextual (clic derecho).
 - En caso de error, se mostrará una alerta visual.
 - Se proporcionan mensajes de retroalimentación al subir o descargar archivos.
@@ -63,13 +63,13 @@ Haciendo clic derecho sobre un archivo o carpeta, se despliega un menú con las 
 ### ⚠️ Posibles Errores
 - La aplicación ha sido probada con **FileZilla Server**, por lo que otros servidores pueden presentar incompatibilidades.
 - No se ha probado con servidores externos (fuera de la red local).
-- En ocasiones, la sincronización inicial del explorador de archivos puede fallar, mostrando la carpeta "Root" vacía. En ese caso, reconéctate al servidor.
+- En ocasiones, la sincronización inicial del explorador de archivos puede fallar, mostrando la carpeta "`Root`" vacía. En ese caso, reconéctate al servidor.
 
 
 ---
 
 ## 👨‍💻 Manual de Programador
-### ⚙️Tecnologías utilizadas
+### ⚙️ Tecnologías utilizadas
 - **Java 17**
 - **Launch4J**: para la creación de un archivo ejecutable
 #### Librerias y frameworks
@@ -98,6 +98,7 @@ graphic-ftp/
 │   │   │   │   ├── sinbelisk/
 │   │   │   │   │   ├── graphicftp/
 │   │   │   │   │   │   ├── FTPExplorerApp.java   # Clase principal de la aplicación
+│   │   │   │   │   │   ├── Main.java             # Clase que contiene el método main
 │   │   │   │   │   │   │
 │   │   │   │   │   │   ├── services/             # Paquete con los servicios utilizados
 │   │   │   │   │   │   │   ├── FTPClientManager  # Gestiona la conexión al servidor FTP y sus operaciones
@@ -148,7 +149,7 @@ Para más información, revisa las clases resaltadas. Todas las clases han sido 
 
 ---
 
-### 🔄 Sincronización Servidor-Explorador
+#### 🔄 Sincronización Servidor-Explorador
 
 La clase `FTPFileExplorer.java` utiliza el servicio `FTPClientManager.java` para gestionar la conexión al servidor FTP.  
 A través de este servicio, se obtiene la lista de archivos y carpetas disponibles para el usuario autenticado y se sincroniza con el `TreeView` del explorador de archivos.
@@ -160,7 +161,7 @@ A través de este servicio, se obtiene la lista de archivos y carpetas disponibl
 
 ---
 
-### ⏳ Lazy Loading
+#### ⏳ Lazy Loading
 
 El algoritmo de sincronización en `FTPFileExplorer.java` implementa **Lazy Loading** para optimizar el rendimiento.
 
@@ -170,3 +171,25 @@ El algoritmo de sincronización en `FTPFileExplorer.java` implementa **Lazy Load
 - **Eficiencia:** Se evita sobrecargar tanto el servidor con peticiones innecesarias como el dispositivo del usuario con datos no requeridos.
 
 Este enfoque mejora la escalabilidad y la experiencia del usuario, asegurando una carga rápida y fluida de los archivos.
+
+---
+
+#### ⚙️ Algoritmos y Funcionalidades Clave
+
+1. **Gestión de Conexión FTP**:
+    - La clase `FTPClientManager.java` es responsable de gestionar todas las operaciones relacionadas con el servidor FTP, como conectar, desconectar, y ejecutar comandos FTP.
+    - Implementa métodos para subir, descargar, renombrar y eliminar archivos y carpetas en el servidor FTP.
+
+2. **Exploración de Archivos**:
+    - `FTPFileExplorer.java` maneja la exploración de archivos y carpetas en el servidor FTP.
+   
+3. **Menú Contextual**:
+    - La clase `FileTreeContextMenu.java` gestiona el menú contextual que permite a los usuarios realizar acciones como crear, renombrar, eliminar, subir y descargar archivos y carpetas.
+    - Utiliza **eventos JavaFX** para ejecutar las acciones correspondientes cuando el usuario interactúa con el menú.
+
+4. **Utilidades**:
+    - `FileChooserUtils.java` facilita la selección de archivos y directorios en el sistema local del usuario.
+    - `ElementUtils.java` contiene métodos auxiliares para manipular elementos del `TreeView`.
+    - `AlertFactory.java` genera alertas y mensajes de retroalimentación en la interfaz gráfica para mejorar la experiencia del usuario.
+
+---
